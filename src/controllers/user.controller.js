@@ -39,8 +39,8 @@ module.exports = {
   },
   async update(req, res){
     try{
-      const { body, user: {_id}} = req
-      const user = await User.findByIdAndUpdate(_id, body, {new: true})
+      const { body } = req
+      const user = await User.findByIdAndUpdate(body._id, body, {new: true})
 
       res.status(201).json(user)
     } catch(error){
@@ -82,7 +82,8 @@ module.exports = {
       )
 
       const userKind = user.userType === 'admin' ? 'admin' : 'user'
-      res.status(201).json({token, userKind})
+      const userState = user.active === 'activo' ? 'activo' : 'inactivo'
+      res.status(201).json({token, userKind, userState})
     } catch(error){
       res.status(401).json({message: error.message})
     }
